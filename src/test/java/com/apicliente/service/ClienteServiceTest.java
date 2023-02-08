@@ -27,6 +27,16 @@ public class ClienteServiceTest {
     @InjectMocks
     private ClienteService clienteService;
 
+
+    @Test
+    public void saveSuccess() {
+        var expectedCliente = getMockCliente();
+        when(clienteReposieoty.save(any(Cliente.class))).thenReturn(expectedCliente);
+
+        clienteService.save(expectedCliente);
+        verify(clienteReposieoty).save(expectedCliente);
+    }
+
     @Test
     public void getAllSuccess() {
         var expectedCliente = getMockCliente();
