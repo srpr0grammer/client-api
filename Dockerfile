@@ -1,15 +1,10 @@
-#
-# Build stage
-#
-FROM maven:3.8.2-openjdk-11 AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package -Dmaven.test.skip
+FROM openjdk:11-jre-slim
 
-#
-# Package stage
-#
-FROM openjdk:11
-EXPOSE 8080
-COPY --from=build /home/app/target/*.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the application jar file to the container
+COPY target/client-api.jar /app/clent-api.jar
+
+# Set the command to run the jar file
+CMD ["java", "-jar", "clent-api.jar"]

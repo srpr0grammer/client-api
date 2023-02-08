@@ -1,35 +1,19 @@
 version: '3'
 services:
-  db:
-    image: mysql
-    volumes:
-      - dbdata:/var/lib/mysql
-    networks:
-      - clientes-compose-network
-    restart: always
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: customer_tb
-
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: customer/customers:1.0
-    links:
-      - db
-    networks:
-      - clientes-compose-network
+    container_name: client-api
+    image: client-api
+    build: ./
+    ports:
+      - "8080:8080"
     depends_on:
       - db
+  db:
+    container_name: postgres-db-client-api
+    image: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: customer-db
     ports:
-      - 8080:8080
-
-volumes:
-  dbdata:
-
-networks:
-  clientes-compose-network:
-    driver: bridge
+      - "5433:5432"
